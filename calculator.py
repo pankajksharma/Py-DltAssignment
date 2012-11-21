@@ -4,12 +4,11 @@ def baseConverter(ibase,obase,inum,bases):
 	negNum = 0
 	if inum.find('-') == 0:
 		negNum = 1
-	else:
-		pass
-
+	
 	for n in list(inum):
 		if not bases.has_key(n) or bases[n] >= ibase:
 			if n != '.' and n != '-':
+				print bases[n],n
 				print "Invalid Number."
 				exit()
 
@@ -24,6 +23,7 @@ def baseConverter(ibase,obase,inum,bases):
 	decSum = 0
 	count = 0
 	intPart.reverse()
+
 	for i in intPart:
 		decSum = decSum+(bases[i]*(ibase**count))
 		count = count + 1
@@ -89,6 +89,12 @@ def performOperation(num1,num2,op,bases):
 		return num1 + num2
 	elif op == '-':
 		return num1 - num2
+
+	elif op == '/':
+		return num1/num2
+
+	elif op == '*':
+		return num1*num2
 	
 	elif op == '|':
 		frac1 = '0.'+str(num1).split('.')[1]
@@ -155,6 +161,32 @@ def main():
 	num1 = float(baseConverter(int(base1),10,num1,bases))
 	#print num1
 
+	ch=raw_input("\nMenu:\n1->Base Conversion\n2->Logical Not\n3->Anything Else\nEnter Choice: ")
+
+	if int(ch)==1 or int(ch)==2:
+		base3 = raw_input("\n\nEnter Output base: ")
+		if not base3.isdigit() or (int(base3) > 62 or int(base3) < 2):
+			print "Invalid Base"
+			exit()
+	if int(ch)==1:
+		result = baseConverter(10,int(base3),str(num1),bases)
+		print 'Output:',result
+		exit()
+
+	if int(ch)==2:
+		result=list(baseConverter(10,2,str(num1),bases))
+		print result
+		for i in range(len(result)):
+			if result[i]=='1':
+				result[i]='0'
+			elif result[i]=='0':
+				result[i]='1'
+		out=''.join(result)
+		print result
+		result = baseConverter(2,int(base3),out,bases)
+		print 'Output:',result
+		exit()
+
 	base2 = raw_input("\n\nEnter Base 2: ")
 	if not base2.isdigit() or (int(base1) > 62 or int(base1) < 2):
 		print "Invalid Base"
@@ -163,8 +195,8 @@ def main():
 	num2 = float(baseConverter(int(base2),10,num2,bases))
 	#print num2
 
-	validOp = ['+','-','&','|']
-	op = raw_input('\n\nValid Operations: \n(+ -> Add  - -> "Subtract(1-2)"  & -> "Logical And"  | -> "Logical Or")\n\nEnter a symbol: ')
+	validOp = ['+','-','&','|','/','*']
+	op = raw_input('\n\nValid Operations: \n(+ -> Add  - -> "Subtract(1-2)"  & -> "Logical And"  | -> "Logical Or"  / -> Divide(1/2) * -> Multiply)\n\nEnter a symbol: ')
 	if op not in validOp:
 		print 'Invlid Operand'
 		exit()
